@@ -1,12 +1,36 @@
 {
-  "name": "hinagi",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "name": "hinagi",
+    "version": "0.0.1",
+    "description": "Feature rich music bot.",
+    "main": "./dist/index.js",
+    "scripts": {
+        "start": "./dist/index.js",
+        "start:server": "tsx src/api/server.ts --dev",
+        "dev": "tsx src/index.ts --dev",
+        "build": "tsc",
+        "format": "biome check --write .",
+        "lint": "biome check",
+        "prepare": "husky"
+    },
+    "keywords": [],
+    "author": "Aaron Sandoval",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "@prisma/client": "^5.19.1",
+        "config": "github:node-config/node-config",
+        "dotenv": "^16.4.5",
+        "lavalink-client": "github:tomato6966/lavalink-client",
+        "seyfert": "github:tiramisulabs/seyfert"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^1.8.3",
+        "@types/config": "^3.3.5",
+        "@types/node": "^22.5.4",
+        "husky": "^9.1.5",
+        "lint-staged": "^15.2.10",
+        "prisma": "^5.19.1",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.19.0",
+        "typescript": "^5.5.4"
+    }
 }

@@ -1,0 +1,17 @@
+model GuildConfig {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  configId      String
+  prefix        String  @default("!")
+  language      String  @default("en_US")
+  defaultVolume Int     @default(100)
+  djModule      DJ?     @relation(fields: [dJId], references: [id])
+  Guild         Guild[]
+  dJId          String?
+}
+
+model DJ {
+  id          String        @id @map("_id")
+  activated   Boolean       @default(false)
+  roles       String[]
+  GuildConfig GuildConfig[]
+}

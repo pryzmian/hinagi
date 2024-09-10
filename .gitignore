@@ -1,0 +1,7 @@
+/node_modules
+/.env
+/config/local.ts
+/dist
+/.vscode
+/logs
+/pnpm-lock.yaml
