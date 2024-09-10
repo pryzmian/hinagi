@@ -5,7 +5,7 @@ export class Database extends PrismaClient {
     /**
      * Discord client instance.
      */
-    private client = useClient();
+    private client = useClient()!;
 
     /**
      * Database connection status.

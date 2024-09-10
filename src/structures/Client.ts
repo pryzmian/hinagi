@@ -1,17 +1,25 @@
+import config from "config";
 import { Client } from "seyfert";
 import { Middlewares } from "../middlewares";
 import { handleMiddlewaresError } from "../utils/functions/onMiddlewaresError";
 import { HookRegistry, Symbols } from "../utils/hooks";
+import { BotConfig } from "../utils/types";
 
 export class Hinagi extends Client {
     public constructor() {
         super({
+            allowedMentions: {
+                replied_user: false,
+            },
             commands: {
+                prefix: () => [config.get<BotConfig>("botConfig").prefix],
+                reply: () => true,
                 defaults: {
                     onMiddlewaresError: () => handleMiddlewaresError.bind(this),
                 },
             },
         });
+
         this.run();
     }
 

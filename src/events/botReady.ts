@@ -1,7 +1,7 @@
 import { createEvent } from "seyfert";
 import { useManager } from "../utils/hooks";
 
-const player = useManager();
+const manager = useManager();
 
 export default createEvent({
     data: {
@@ -9,7 +9,10 @@ export default createEvent({
     },
     run: async (user, client) => {
         const { logger } = client;
-        player.init({ id: client.botId, username: user.username });
+
+        if (!manager) return;
+
+        manager.init({ id: client.botId, username: user.username });
         logger.info(`${user.username} is ready!`);
     },
 });
