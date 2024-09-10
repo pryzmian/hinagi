@@ -14,6 +14,8 @@ import type { EmbedConfig } from "../../utils/types";
 export default class NowPlayingCommand extends Command {
     async run(ctx: CommandContext) {
         const manager = useManager();
+        if (!manager) return;
+        
         const player = manager.getPlayer(ctx.guildId!);
 
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");

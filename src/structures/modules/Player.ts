@@ -1,6 +1,6 @@
 import config from "config";
 import { LavalinkManager } from "lavalink-client";
-import type { GuildShardPayload, SearchResult } from "lavalink-client/dist/types";
+import type { GuildShardPayload, SearchResult } from "lavalink-client";
 import { HookRegistry, Symbols, useClient } from "../../utils/hooks";
 import type { PlayerConfig } from "../../utils/types";
 
@@ -10,14 +10,12 @@ export class Manager extends LavalinkManager {
     /**
      * Discord client instance.
      */
-    private client = useClient();
+    private client = useClient()!;
 
     public constructor() {
         super({
             nodes: playerConfig.nodes,
-            sendToShard: (guildId: string, payload: GuildShardPayload) => {
-                return this.client.gateway.send(this.client.gateway.calculateShardId(guildId), payload);
-            },
+            sendToShard: (guildId: string, payload: GuildShardPayload) => this.client.gateway.send(this.client.gateway.calculateShardId(guildId), payload),
             playerOptions: {
                 defaultSearchPlatform: playerConfig.defaultSearchPlatform,
             },

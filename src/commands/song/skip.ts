@@ -26,6 +26,8 @@ export default class SkipCommand extends Command {
         const { to } = options;
 
         const manager = useManager();
+        if (!manager) return;
+        
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
 
         const player = manager.getPlayer(ctx.guildId!);

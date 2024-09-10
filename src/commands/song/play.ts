@@ -11,6 +11,8 @@ const options = {
         required: true,
         autocomplete: async (int) => {
             const manager = useManager();
+            if (!manager) return;
+
             const query = int.getInput();
 
             if (!query)
@@ -52,6 +54,8 @@ export default class PlayCommand extends Command {
         const { query } = options;
 
         const manager = useManager();
+        if (!manager) return;
+        
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
 
         const voiceChannel = client.cache.voiceStates?.get(member?.id!, ctx.guildId!);

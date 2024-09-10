@@ -1,4 +1,4 @@
-import type { LavalinkNodeOptions, SearchPlatform } from "lavalink-client/dist/types";
+import type { LavalinkNodeOptions, SearchPlatform } from "lavalink-client";
 
 export type BotConfig = {
     prefix: string;

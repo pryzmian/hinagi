@@ -1,4 +1,4 @@
-import type { Player, PlaylistInfo, Track, UnresolvedTrack } from "lavalink-client/dist/types";
+import type { Player, PlaylistInfo, Track, UnresolvedTrack } from "lavalink-client";
 
 type TrackItem = Track | UnresolvedTrack | null;
 type PlaylistItem = PlaylistInfo | null;

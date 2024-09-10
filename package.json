@@ -17,7 +17,7 @@
     "license": "Apache-2.0",
     "dependencies": {
         "@prisma/client": "^5.19.1",
-        "config": "github:node-config/node-config",
+        "config": "^3.3.12",
         "dotenv": "^16.4.5",
         "lavalink-client": "github:tomato6966/lavalink-client",
         "seyfert": "github:tiramisulabs/seyfert"
@@ -29,7 +29,6 @@
         "husky": "^9.1.5",
         "lint-staged": "^15.2.10",
         "prisma": "^5.19.1",
-        "ts-node": "^10.9.2",
         "tsx": "^4.19.0",
         "typescript": "^5.5.4"
     }
