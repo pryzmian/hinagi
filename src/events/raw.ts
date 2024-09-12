@@ -1,9 +1,10 @@
 import { createEvent } from "seyfert";
-import { useManager } from "../utils/hooks";
+import container from "../inversify.config";
+import { Manager } from "../structures";
 
-const manager = useManager();
+const manager = container.get<Manager>(Manager);
 
 export default createEvent({
     data: { name: "raw" },
-    run: async (payload: any) => await manager?.sendRawData(payload),
+    run: async (payload: any) => await manager.sendRawData(payload),
 });

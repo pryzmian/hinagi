@@ -24,7 +24,8 @@
                 "useFilenamingConvention": "off",
                 "useNamingConvention": "off",
                 "useSingleCaseStatement": "off",
-                "noParameterProperties": "off"
+                "noParameterProperties": "off",
+                "noNamespace": "off"
             },
             "complexity": {
                 "noStaticOnlyClass": "off",

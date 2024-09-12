@@ -1,4 +1,4 @@
-import { Command, CommandContext, Declare } from "seyfert";
+import { Command, type CommandContext, Declare } from "seyfert";
 
 @Declare({
     name: "ping",
@@ -8,6 +8,6 @@ import { Command, CommandContext, Declare } from "seyfert";
 })
 export default class PingCommand extends Command {
     async run(ctx: CommandContext) {
-        await ctx.editOrReply({ content: `Pong! Latency: ${ctx.client.gateway.latency}ms`});
+        await ctx.editOrReply({ content: `Pong! Latency: ${ctx.client.gateway.latency}ms` });
     }
 }

@@ -9,7 +9,12 @@ module.exports = config.bot({
     debug: isDev,
     token: process.env.DISCORD_TOKEN,
     applicationId: process.env.APPLICATION_ID,
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ],
     locations: {
         output,
         base: "src",

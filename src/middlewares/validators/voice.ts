@@ -1,6 +1,6 @@
 import { createMiddleware } from "seyfert";
 
-export const inVoiceChannel = createMiddleware<void>(async ({ context, next, stop }) => {
+export const inVoiceChannelMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { member, guildId, client } = context;
     const voiceChannel = client.cache.voiceStates?.get(member?.id!, guildId!);
 
@@ -9,7 +9,7 @@ export const inVoiceChannel = createMiddleware<void>(async ({ context, next, sto
     return next();
 });
 
-export const sameVoiceChannel = createMiddleware<void>(async ({ context, next, stop }) => {
+export const sameVoiceChannelMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { member, guildId, client } = context;
     const voiceChannel = client.cache.voiceStates?.get(member?.id!, guildId!);
     const botChannel = client.cache.voiceStates?.get(client.botId!, guildId!);

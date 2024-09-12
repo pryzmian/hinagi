@@ -1,7 +1,7 @@
 import config from "config";
-import { Command, type CommandContext, Declare } from "seyfert";
-import { Utils } from "../../structures";
-import { useManager } from "../../utils/hooks";
+import { inject } from "inversify";
+import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
+import { Manager, Utils } from "../../structures";
 import type { EmbedConfig } from "../../utils/types";
 
 @Declare({
@@ -11,28 +11,20 @@ import type { EmbedConfig } from "../../utils/types";
     integrationTypes: ["GuildInstall"],
     contexts: ["Guild"],
 })
+@Middlewares(["inVoiceChannel", "sameVoiceChannel"])
 export default class NowPlayingCommand extends Command {
+    @inject(Manager) private manager!: Manager;
+
     async run(ctx: CommandContext) {
-        const manager = useManager();
-        if (!manager) return;
-        
-        const player = manager.getPlayer(ctx.guildId!);
+        if (!this.manager) return;
+
+        // haz esto mismo donde uses el manager
+        const player = this.manager.getPlayer(ctx.guildId!);
 
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
         const currentSong = player.queue.current;
 
         await ctx.deferReply();
-
-        if (!currentSong) {
-            return ctx.editOrReply({
-                embeds: [
-                    {
-                        color: colors.transparent,
-                        description: `${emojis.error} There is no song currently playing!`,
-                    },
-                ],
-            });
-        }
 
         await ctx.editOrReply({
             embeds: [

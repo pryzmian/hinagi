@@ -1,13 +1,7 @@
 import type { MiddlewareContext } from "seyfert";
-import { historyIsEmpty, queueExists, queueIsEmpty, queueNotPlaying, trackExists } from "./validators/queue";
-import { inVoiceChannel, sameVoiceChannel } from "./validators/voice";
+import { inVoiceChannelMiddleware, sameVoiceChannelMiddleware } from "./validators/voice";
 
 export const Middlewares = {
-    queueExists,
-    queueIsEmpty,
-    historyIsEmpty,
-    trackExists,
-    queueNotPlaying,
-    inVoiceChannel,
-    sameVoiceChannel,
+    inVoiceChannel: inVoiceChannelMiddleware,
+    sameVoiceChannel: sameVoiceChannelMiddleware,
 } satisfies Record<string, MiddlewareContext>;

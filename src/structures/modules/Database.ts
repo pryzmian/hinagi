@@ -1,19 +1,17 @@
 import { PrismaClient } from "@prisma/client";
-import { HookRegistry, Symbols, useClient } from "../../utils/hooks";
+import { injectable } from "inversify";
+import type { Hinagi } from "../Client";
 
+@injectable()
 export class Database extends PrismaClient {
-    /**
-     * Discord client instance.
-     */
-    private client = useClient()!;
-
     /**
      * Database connection status.
      */
     private connected: boolean = false;
 
-    public constructor() {
+    public constructor(private readonly client: Hinagi) {
         super();
+        this.client = client;
         this.connect();
     }
 
@@ -24,7 +22,6 @@ export class Database extends PrismaClient {
     public async connect(): Promise<void> {
         await this.$connect().then(() => {
             this.connected = true;
-            HookRegistry.set(Symbols.kDatabase, this);
             this.client.logger.info("Database has been initialized.");
         });
     }

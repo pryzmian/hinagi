@@ -1,18 +1,18 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares, Options, createStringOption } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
-import { Utils } from "../../structures";
-import { useManager } from "../../utils/hooks";
+import { Manager, Utils } from "../../structures";
 import type { EmbedConfig } from "../../utils/types";
+
+import { inject } from "inversify";
+import container from "../../inversify.config";
 
 const options = {
     query: createStringOption({
         description: "URL of a song or a search query.",
         required: true,
         autocomplete: async (int) => {
-            const manager = useManager();
-            if (!manager) return;
-
+            const manager = container.get(Manager);
             const query = int.getInput();
 
             if (!query)
@@ -49,18 +49,15 @@ const options = {
 @Options(options)
 @Middlewares(["inVoiceChannel", "sameVoiceChannel"])
 export default class PlayCommand extends Command {
+    @inject(Manager) private manager!: Manager;
     async run(ctx: CommandContext<typeof options>) {
         const { client, options, member, author } = ctx;
         const { query } = options;
 
-        const manager = useManager();
-        if (!manager) return;
-        
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
-
         const voiceChannel = client.cache.voiceStates?.get(member?.id!, ctx.guildId!);
 
-        if (!manager.isNodeAvailable()) {
+        if (!this.manager.isNodeAvailable()) {
             return ctx.write({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
@@ -74,7 +71,7 @@ export default class PlayCommand extends Command {
 
         await ctx.deferReply();
 
-        const player = manager.createPlayer({
+        const player = this.manager.createPlayer({
             guildId: ctx.guildId!,
             voiceChannelId: voiceChannel?.channelId!,
             textChannelId: ctx.channelId!,
@@ -82,7 +79,7 @@ export default class PlayCommand extends Command {
             volume: 100,
         });
 
-        const { loadType, tracks, playlist } = await manager.search(query, author);
+        const { loadType, tracks, playlist } = await this.manager.search(query, author);
         player.set("commandContext", ctx);
 
         if (!player.connected) await player.connect();

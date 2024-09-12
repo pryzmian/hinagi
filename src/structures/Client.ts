@@ -1,10 +1,12 @@
 import config from "config";
+import { injectable } from "inversify";
 import { Client } from "seyfert";
 import { Middlewares } from "../middlewares";
 import { handleMiddlewaresError } from "../utils/functions/onMiddlewaresError";
-import { HookRegistry, Symbols } from "../utils/hooks";
-import { BotConfig } from "../utils/types";
+import type { BotConfig } from "../utils/types";
+import container from "../inversify.config";
 
+@injectable()
 export class Hinagi extends Client {
     public constructor() {
         super({
@@ -28,7 +30,6 @@ export class Hinagi extends Client {
      * @returns A promise that resolves when the client is loaded.
      */
     public async run(): Promise<void> {
-        HookRegistry.set(Symbols.kClient, this);
         this.setServices({
             middlewares: Middlewares,
             cache: {
@@ -45,6 +46,17 @@ export class Hinagi extends Client {
                 },
             },
         });
+
+        if (this.commands) {
+            this.commands.onCommand = (file) => {
+                return container.resolve(file);
+            };
+
+            this.commands.onSubCommand = (file) => {
+                return container.resolve(file);
+            };
+        }
+
         await this.start();
         await this.uploadCommands();
     }
