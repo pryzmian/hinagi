@@ -1,6 +1,6 @@
 import { createMiddleware } from "seyfert";
-import { Manager } from "../../structures";
 import container from "../../inversify.config";
+import { Manager } from "../../structures";
 
 const manager = container.get<Manager>(Manager);
 

@@ -1,10 +1,10 @@
 import config from "config";
 import { injectable } from "inversify";
 import { Client } from "seyfert";
+import container from "../inversify.config";
 import { Middlewares } from "../middlewares";
 import { handleMiddlewaresError } from "../utils/functions/onMiddlewaresError";
 import type { BotConfig } from "../utils/types";
-import container from "../inversify.config";
 
 @injectable()
 export class Hinagi extends Client {

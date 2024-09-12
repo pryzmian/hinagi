@@ -25,7 +25,8 @@
                 "useNamingConvention": "off",
                 "useSingleCaseStatement": "off",
                 "noParameterProperties": "off",
-                "noNamespace": "off"
+                "noNamespace": "off",
+                "useImportType": "off"
             },
             "complexity": {
                 "noStaticOnlyClass": "off",
