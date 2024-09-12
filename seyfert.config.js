@@ -1,9 +1,7 @@
 const { config } = require("seyfert");
 const { GatewayIntentBits } = require("seyfert/lib/types");
 
-const isWindows = process.platform === "win32";
 const isDev = process.argv.includes("--dev");
-const output = isWindows && isDev ? "src" : "dist";
 
 module.exports = config.bot({
     debug: isDev,
@@ -16,7 +14,7 @@ module.exports = config.bot({
         GatewayIntentBits.MessageContent,
     ],
     locations: {
-        output,
+        output: "dist",
         base: "src",
         events: "events",
         commands: "commands",

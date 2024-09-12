@@ -1,8 +1,7 @@
-import { createEvent } from "seyfert";
-import container from "../inversify.config";
-import { Manager } from "../structures";
+import container from "../container";
 
-const manager = container.get<Manager>(Manager);
+import { createEvent } from "seyfert";
+import { Manager } from "../structures";
 
 export default createEvent({
     data: {
@@ -10,10 +9,11 @@ export default createEvent({
     },
     run: async (user, client) => {
         const { logger } = client;
+        const manager = container.get(Manager);
 
-        if (!manager) return;
+        await manager.load();
+        await manager.init({ id: client.botId, username: user.username });
 
-        manager.init({ id: client.botId, username: user.username });
         logger.info(`${user.username} is ready!`);
     },
 });

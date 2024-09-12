@@ -1,8 +1,8 @@
 import { createEvent } from "seyfert";
-import container from "../inversify.config";
+import container from "../container";
 import { Manager } from "../structures";
 
-const manager = container.get<Manager>(Manager);
+const manager = container.get(Manager);
 
 export default createEvent({
     data: { name: "raw" },

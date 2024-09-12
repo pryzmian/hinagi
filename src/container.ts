@@ -11,8 +11,6 @@ decorate(injectable(), Command);
 decorate(injectable(), SubCommand);
 
 container.bind(Hinagi).toSelf().inSingletonScope();
-container.get<Hinagi>(Hinagi);
-
 container.bind(Database).toSelf().inSingletonScope();
 container.bind(Manager).toSelf().inSingletonScope();
 

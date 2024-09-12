@@ -1,28 +1,27 @@
 import config from "config";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { LavalinkManager } from "lavalink-client";
 import type { GuildShardPayload, SearchResult } from "lavalink-client";
-import type { User } from "seyfert";
 import type { PlayerConfig } from "../../utils/types";
-import type { Hinagi } from "../Client";
+import { Hinagi } from "../Client";
 
 const playerConfig = config.get<PlayerConfig>("playerConfig");
 
 @injectable()
 export class Manager extends LavalinkManager {
-    constructor(private readonly client: Hinagi) {
+    @inject(Hinagi) private readonly client!: Hinagi;
+
+    constructor() {
         super({
             nodes: playerConfig.nodes,
             sendToShard: (guildId: string, payload: GuildShardPayload) => {
-                const shardId = client.gateway.calculateShardId(guildId);
-                return client.gateway.send(shardId, payload);
+                const shardId = this.client.gateway.calculateShardId(guildId);
+                return this.client.gateway.send(shardId, payload);
             },
             playerOptions: {
                 defaultSearchPlatform: playerConfig.defaultSearchPlatform,
-                requesterTransformer: (requester: unknown) => client.users.fetch((requester as User).id),
             },
         });
-        this.load();
     }
 
     /**
