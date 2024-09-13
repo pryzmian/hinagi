@@ -7,8 +7,11 @@ import { Middlewares } from "../middlewares";
 import type { BotConfig } from "../utils/types";
 
 import { deferReplyResponse, onMiddlewaresError, onOptionsError } from "../utils/functions";
+import { Manager } from "./modules/Player";
 @injectable()
 export class Hinagi extends Client {
+    public readonly manager: Manager;
+
     public constructor() {
         super({
             allowedMentions: {
@@ -24,6 +27,8 @@ export class Hinagi extends Client {
                 },
             },
         });
+
+        this.manager = new Manager(this);
     }
 
     /**

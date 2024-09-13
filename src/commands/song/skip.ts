@@ -1,8 +1,7 @@
 import config from "config";
-import { inject } from "inversify";
 import { Command, type CommandContext, Declare, Middlewares, Options, createIntegerOption } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
-import { Manager, Utils } from "../../structures";
+import { Utils } from "../../structures";
 import type { EmbedConfig } from "../../utils/types";
 
 const options = {
@@ -22,18 +21,25 @@ const options = {
 @Options(options)
 @Middlewares(["inVoiceChannel", "sameVoiceChannel"])
 export default class SkipCommand extends Command {
-    @inject(Manager) private manager!: Manager;
     async run(ctx: CommandContext<typeof options>) {
-        if (!this.manager) return;
-
         const { options } = ctx;
         const { to } = options;
-
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
-        const player = this.manager.getPlayer(ctx.guildId!);
+
+        const player = ctx.client.manager.getPlayer(ctx.guildId!);
+        if (!player)
+            return ctx.editOrReply({
+                flags: MessageFlags.Ephemeral,
+                embeds: [
+                    {
+                        color: colors.error,
+                        description: `${emojis.error} There is no music playing!`,
+                    },
+                ],
+            });
 
         if (to && to > player.queue.tracks.length)
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {

@@ -1,7 +1,7 @@
 import config from "config";
-import { inject } from "inversify";
 import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
-import { Manager, Utils } from "../../structures";
+import { MessageFlags } from "seyfert/lib/types";
+import { Utils } from "../../structures";
 import type { EmbedConfig } from "../../utils/types";
 
 @Declare({
@@ -13,17 +13,22 @@ import type { EmbedConfig } from "../../utils/types";
 })
 @Middlewares(["inVoiceChannel", "sameVoiceChannel"])
 export default class NowPlayingCommand extends Command {
-    @inject(Manager) private manager!: Manager;
-
     async run(ctx: CommandContext) {
-        if (!this.manager) return;
-
-        const player = this.manager.getPlayer(ctx.guildId!);
-
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
-        const currentSong = player.queue.current;
 
-        await ctx.deferReply();
+        const player = ctx.client.manager.getPlayer(ctx.guildId!);
+        if (!player)
+            return ctx.editOrReply({
+                flags: MessageFlags.Ephemeral,
+                embeds: [
+                    {
+                        color: colors.error,
+                        description: `${emojis.error} There is no music playing!`,
+                    },
+                ],
+            });
+
+        const currentSong = player.queue.current;
 
         await ctx.editOrReply({
             embeds: [
