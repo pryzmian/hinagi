@@ -36,7 +36,7 @@ export const playerConfig = {
     defaultVolume: 100,
     defaultSearchPlatform: "spsearch",
     emptyChannelTimeout: 300_000, // 5 minutes
-    maxQueueSize: undefined, // unlimited
+    maxQueueSize: null,
     nodes: [
         {
             id: process.env.LAVALINK_NODE_ID!,

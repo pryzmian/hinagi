@@ -36,6 +36,6 @@ export type PlayerConfig = {
     defaultVolume: number;
     defaultSearchPlatform: SearchPlatform;
     emptyChannelTimeout: number;
-    maxQueueSize: number | undefined;
+    maxQueueSize: number | null;
     nodes: LavalinkNodeOptions[];
 };
