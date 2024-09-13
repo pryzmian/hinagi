@@ -6,7 +6,7 @@ import { Client } from "seyfert";
 import { Middlewares } from "../middlewares";
 import type { BotConfig } from "../utils/types";
 
-import { onMiddlewaresError } from "../utils/functions/onMiddlewaresError";
+import { deferReplyResponse, onMiddlewaresError, onOptionsError } from "../utils/functions";
 @injectable()
 export class Hinagi extends Client {
     public constructor() {
@@ -17,8 +17,10 @@ export class Hinagi extends Client {
             commands: {
                 prefix: () => [config.get<BotConfig>("botConfig").prefix],
                 reply: () => true,
+                deferReplyResponse,
                 defaults: {
                     onMiddlewaresError,
+                    onOptionsError,
                 },
             },
         });

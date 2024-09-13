@@ -4,7 +4,7 @@
     "description": "Feature rich music bot.",
     "main": "./dist/index.js",
     "lint-staged": {
-        "*.ts": "biome check --write"
+        "*.{ts,json}": ["biome check --write ."]
     },
     "scripts": {
         "start": "node ./dist/index.js",

@@ -18,7 +18,6 @@ export default class NowPlayingCommand extends Command {
     async run(ctx: CommandContext) {
         if (!this.manager) return;
 
-        // haz esto mismo donde uses el manager
         const player = this.manager.getPlayer(ctx.guildId!);
 
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");

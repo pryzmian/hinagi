@@ -49,7 +49,8 @@
                 "noNodejsModules": "off",
                 "useHookAtTopLevel": "off",
                 "noUnusedVariables": "off",
-                "useImportExtensions": "off"
+                "useImportExtensions": "off",
+                "noUnusedFunctionParameters": "off"
             },
             "performance": {
                 "noBarrelFile": "off"

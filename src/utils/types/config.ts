@@ -25,6 +25,7 @@ export type EmbedConfig = {
         stop: string;
         queue: string;
         playing: string;
+        thinking: string;
         support: string;
         source: string;
         invite: string;

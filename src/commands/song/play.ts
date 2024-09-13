@@ -4,7 +4,7 @@ import container from "../../container";
 import { Command, type CommandContext, Declare, Middlewares, Options, createStringOption } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
 import { Manager, Utils } from "../../structures";
-import type { EmbedConfig } from "../../utils/types";
+import { DestroyReason, type EmbedConfig } from "../../utils/types";
 
 import { inject } from "inversify";
 
@@ -89,13 +89,13 @@ export default class PlayCommand extends Command {
             case "empty":
             case "error":
                 {
-                    if (!player.queue.current) await player.destroy();
+                    if (!player.queue.current) await player.destroy(DestroyReason.NoResultsFound);
 
                     await ctx.editOrReply({
                         embeds: [
                             {
                                 color: colors.transparent,
-                                description: `${emojis.error} No results found for \`${query}\`!`,
+                                description: `${emojis.error} No results found for \`${query ?? "Unknown"}\`, try providing a valid song link or search query!`,
                             },
                         ],
                     });

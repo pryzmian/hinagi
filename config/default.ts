@@ -25,6 +25,7 @@ export const embedConfig = {
         stop: "⏹️",
         queue: "📜",
         playing: "🎶",
+        thinking: "🤔",
         support: "🚨",
         source: "💻",
         invite: "🔗",
