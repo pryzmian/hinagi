@@ -1,19 +1,15 @@
 import config from "config";
-import container from "../../container";
 
 import { Command, type CommandContext, Declare, Middlewares, Options, createStringOption } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
-import { Manager, Utils } from "../../structures";
+import { Utils } from "../../structures";
 import { DestroyReason, type EmbedConfig } from "../../utils/types";
-
-import { inject } from "inversify";
 
 const options = {
     query: createStringOption({
         description: "URL of a song or a search query.",
         required: true,
         autocomplete: async (int) => {
-            const manager = container.get(Manager);
             const query = int.getInput();
 
             if (!query)
@@ -21,7 +17,7 @@ const options = {
                     { name: "No query provided", value: "https://open.spotify.com/track/1jKXjxMWlq4BhH6f9GtZbu?si=e50c0b078eac45f6" },
                 ]);
 
-            const { tracks, playlist } = await manager.search(query, int.user);
+            const { tracks, playlist } = await int.client.manager.search(query, int.user);
 
             if (playlist)
                 return int.respond([
@@ -50,7 +46,6 @@ const options = {
 @Options(options)
 @Middlewares(["inVoiceChannel", "sameVoiceChannel"])
 export default class PlayCommand extends Command {
-    @inject(Manager) private manager!: Manager;
     async run(ctx: CommandContext<typeof options>) {
         const { client, options, member, author } = ctx;
         const { query } = options;
@@ -58,8 +53,8 @@ export default class PlayCommand extends Command {
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
         const voiceChannel = client.cache.voiceStates?.get(member?.id!, ctx.guildId!);
 
-        if (!this.manager.isNodeAvailable()) {
-            return ctx.write({
+        if (!ctx.client.manager.isNodeAvailable()) {
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -72,7 +67,7 @@ export default class PlayCommand extends Command {
 
         await ctx.deferReply();
 
-        const player = this.manager.createPlayer({
+        const player = ctx.client.manager.createPlayer({
             guildId: ctx.guildId!,
             voiceChannelId: voiceChannel?.channelId!,
             textChannelId: ctx.channelId!,
@@ -80,7 +75,7 @@ export default class PlayCommand extends Command {
             volume: 100,
         });
 
-        const { loadType, tracks, playlist } = await this.manager.search(query, author);
+        const { loadType, tracks, playlist } = await ctx.client.manager.search(query, author);
         player.set("commandContext", ctx);
 
         if (!player.connected) await player.connect();
