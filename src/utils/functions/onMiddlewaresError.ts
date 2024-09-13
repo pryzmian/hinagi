@@ -1,16 +1,16 @@
 import config from "config";
-import type { CommandContext } from "seyfert";
+import type { AnyContext } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
 import type { EmbedConfig } from "../types";
 
-export async function handleMiddlewaresError(context: CommandContext, error: Error) {
+export async function onMiddlewaresError(context: AnyContext, error: string) {
     const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
     await context.editOrReply({
         flags: MessageFlags.Ephemeral,
         embeds: [
             {
                 color: colors.transparent,
-                description: `${emojis.error} ${error.message}`,
+                description: `${emojis.error} ${error}`,
             },
         ],
     });

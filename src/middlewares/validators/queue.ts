@@ -1,8 +1,9 @@
+import container from "../../container";
+
 import { createMiddleware } from "seyfert";
-import container from "../../inversify.config";
 import { Manager } from "../../structures";
 
-const manager = container.get<Manager>(Manager);
+const manager = container.get(Manager);
 
 export const queueExistsMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { guildId } = context;

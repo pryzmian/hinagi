@@ -1,11 +1,12 @@
 import config from "config";
+import container from "../../container";
+
 import { Command, type CommandContext, Declare, Middlewares, Options, createStringOption } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
 import { Manager, Utils } from "../../structures";
 import type { EmbedConfig } from "../../utils/types";
 
 import { inject } from "inversify";
-import container from "../../inversify.config";
 
 const options = {
     query: createStringOption({
@@ -118,19 +119,21 @@ export default class PlayCommand extends Command {
                 }
                 break;
 
-            case "playlist": {
-                await player.queue.add(tracks);
-                if (!player.playing) await player.play();
+            case "playlist":
+                {
+                    await player.queue.add(tracks);
+                    if (!player.playing) await player.play();
 
-                await ctx.editOrReply({
-                    embeds: [
-                        {
-                            color: colors.transparent,
-                            description: `${emojis.success} Added *${Utils.toHyperLink(playlist!)}* to the queue! (${tracks.length} songs)`,
-                        },
-                    ],
-                });
-            }
+                    await ctx.editOrReply({
+                        embeds: [
+                            {
+                                color: colors.transparent,
+                                description: `${emojis.success} Added *${Utils.toHyperLink(playlist!)}* to the queue! (${tracks.length} songs)`,
+                            },
+                        ],
+                    });
+                }
+                break;
         }
     }
 }

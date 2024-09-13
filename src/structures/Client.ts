@@ -1,11 +1,12 @@
 import config from "config";
+import container from "../container";
+
 import { injectable } from "inversify";
 import { Client } from "seyfert";
-import container from "../inversify.config";
 import { Middlewares } from "../middlewares";
-import { handleMiddlewaresError } from "../utils/functions/onMiddlewaresError";
 import type { BotConfig } from "../utils/types";
 
+import { onMiddlewaresError } from "../utils/functions/onMiddlewaresError";
 @injectable()
 export class Hinagi extends Client {
     public constructor() {
@@ -17,12 +18,10 @@ export class Hinagi extends Client {
                 prefix: () => [config.get<BotConfig>("botConfig").prefix],
                 reply: () => true,
                 defaults: {
-                    onMiddlewaresError: () => handleMiddlewaresError.bind(this),
+                    onMiddlewaresError,
                 },
             },
         });
-
-        this.run();
     }
 
     /**
