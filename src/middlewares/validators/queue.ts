@@ -12,10 +12,11 @@ export const queueExistsMiddleware = createMiddleware<void>(async ({ context, ne
 export const queueIsEmptyMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
-    const isAutoplayActive = !!player?.get("enabledAutoplay");
 
-    if (!(isAutoplayActive || player?.queue.tracks.length || player?.queue.current))
-        return stop("There are no songs in the queue, try adding some songs first!");
+    const isAutoplayActive = !!player?.get("enabledAutoplay");
+    const queueLength = player.queue.current ? player.queue.tracks.length + 1 : player.queue.tracks.length;
+
+    if (!isAutoplayActive && queueLength === 0) return stop("There are no songs in the queue, try adding some songs first!");
 
     return next();
 });
@@ -24,7 +25,7 @@ export const historyIsEmptyMiddleware = createMiddleware<void>(async ({ context,
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
-    if (!player?.queue.previous.length) return stop("There are no songs in the history, try playing some songs first!");
+    if (!player.queue.previous.length) return stop("There are no songs in the history, try playing some songs first!");
 
     return next();
 });
@@ -35,15 +36,6 @@ export const trackExistsMiddleware = createMiddleware<void>(async ({ context, ne
     const messageId = player?.get<string>("messageId") ?? "";
 
     if (interaction.message?.id !== messageId) return stop("This song is no longer in the queue!");
-
-    return next();
-});
-
-export const queueNotPlayingMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
-    const { guildId, client } = context;
-    const player = client.manager.getPlayer(guildId!);
-
-    if (!player?.playing || player?.paused) return stop("The queue is not playing, try resuming or adding a song to the queue first!");
 
     return next();
 });

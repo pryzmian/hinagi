@@ -1,5 +1,6 @@
 export enum DestroyReason {
     NoResultsFound = "no results found for the provided query.",
+    ChangedChannel = "the voice channel was changed.",
     QueueEmpty = "the queue is empty.",
     NodeDestroyed = "the node was destroyed.",
     NodeDeleted = "the node was deleted.",

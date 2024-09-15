@@ -1,7 +1,7 @@
 import type { Player, PlaylistInfo, Track, UnresolvedTrack } from "lavalink-client";
 
-type TrackItem = Track | UnresolvedTrack | null;
-type PlaylistItem = PlaylistInfo | null;
+type TrackItem = Track | UnresolvedTrack;
+type PlaylistItem = PlaylistInfo;
 
 export class Utils {
     /**
@@ -79,10 +79,9 @@ export class Utils {
      * @param item - The item to convert.
      * @returns The hyperlink string.
      */
-    public static toHyperLink(item: TrackItem | PlaylistItem): string {
-        if (item === null) return "";
+    public static toHyperLink(item: TrackItem | PlaylistItem, query?: string): string {
         if ("info" in item) return `[${item.info.title}](${item.info.uri})`;
-        return `[${item.name}](${item.uri})`;
+        return `[${item.name}](${item.uri ?? query ?? ""})`;
     }
 
     /**

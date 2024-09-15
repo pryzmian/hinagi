@@ -1,6 +1,6 @@
 import config from "config";
 import type { Message } from "seyfert";
-import type { EmbedConfig } from "../../types";
+import type { EmbedConfig } from "#hinagi/types";
 
 const responses: string[] = [
     "Hinagi is thinking... 🤔",

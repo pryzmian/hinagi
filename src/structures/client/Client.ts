@@ -1,14 +1,11 @@
 import config from "config";
-import container from "../container";
 
-import { injectable } from "inversify";
 import { Client } from "seyfert";
-import { Middlewares } from "../middlewares";
-import type { BotConfig } from "../utils/types";
+import { hinagiMiddlewares } from "#hinagi/middlewares";
+import type { BotConfig } from "#hinagi/types";
 
-import { deferReplyResponse, onMiddlewaresError, onOptionsError } from "../utils/functions";
-import { Manager } from "./modules/Player";
-@injectable()
+import { deferReplyResponse, onMiddlewaresError, onOptionsError, onRunError } from "#hinagi/functions";
+import { Manager } from "#hinagi/structures";
 export class Hinagi extends Client {
     public readonly manager: Manager;
 
@@ -24,6 +21,7 @@ export class Hinagi extends Client {
                 defaults: {
                     onMiddlewaresError,
                     onOptionsError,
+                    onRunError,
                 },
             },
         });
@@ -37,31 +35,21 @@ export class Hinagi extends Client {
      */
     public async run(): Promise<void> {
         this.setServices({
-            middlewares: Middlewares,
+            middlewares: hinagiMiddlewares,
             cache: {
                 disabledCache: {
                     overwrites: true,
                     roles: true,
                     emojis: true,
-                    channels: true,
                     threads: true,
                     stickers: true,
+                    channels: true,
                     presences: true,
                     stageInstances: true,
                     bans: true,
                 },
             },
         });
-
-        if (this.commands) {
-            this.commands.onCommand = (file) => {
-                return container.resolve(file);
-            };
-
-            this.commands.onSubCommand = (file) => {
-                return container.resolve(file);
-            };
-        }
 
         await this.start();
         await this.uploadCommands();

@@ -1,5 +1,5 @@
 const { config } = require("seyfert");
-const { GatewayIntentBits } = require("seyfert/lib/types");
+const { GatewayIntentBits } = require("seyfert/lib/types/index.js");
 
 const isDev = process.argv.includes("--dev");
 

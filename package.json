@@ -3,37 +3,43 @@
     "version": "0.0.1",
     "description": "Feature rich music bot.",
     "main": "./dist/index.js",
+    "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1",
     "lint-staged": {
         "*.{ts,json}": ["biome check --write ."]
     },
     "scripts": {
         "start": "node ./dist/index.js",
-        "dev": "node ./dist/index.js --dev",
+        "start:clean": "pnpm clean && pnpm start",
+        "dev": "tsx watch ./src/index.ts --debug",
+        "clean": "node ./scripts/clean.mjs && pnpm build",
         "build": "tsc",
         "format": "biome check --write .",
-        "lint": "biome check",
+        "lint": "biome lint --write ./src",
         "prepare": "husky"
     },
     "keywords": [],
     "author": "Aaron Sandoval",
     "license": "Apache-2.0",
     "dependencies": {
-        "@prisma/client": "^5.19.1",
-        "config": "^3.3.12",
-        "dotenv": "^16.4.5",
-        "inversify": "^6.0.2",
+        "config": "3.3.12",
+        "dotenv": "16.4.5",
         "lavalink-client": "github:tomato6966/lavalink-client",
-        "reflect-metadata": "^0.2.2",
         "seyfert": "github:tiramisulabs/seyfert"
     },
     "devDependencies": {
-        "@biomejs/biome": "^1.9.0",
-        "@types/config": "^3.3.5",
-        "@types/node": "^22.5.4",
-        "husky": "^9.1.6",
-        "lint-staged": "^15.2.10",
-        "prisma": "^5.19.1",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.6.2"
+        "@biomejs/biome": "1.9.0",
+        "@types/config": "3.3.5",
+        "@types/node": "22.5.4",
+        "husky": "9.1.6",
+        "lint-staged": "15.2.10",
+        "ts-node": "10.9.2",
+        "tsx": "4.19.1",
+        "typescript": "5.6.2"
+    },
+    "imports": {
+        "#hinagi/structures": "./dist/structures/index.js",
+        "#hinagi/types": "./dist/utils/types/index.js",
+        "#hinagi/functions": "./dist/utils/functions/index.js",
+        "#hinagi/middlewares": "./dist/middlewares/index.js"
     }
 }

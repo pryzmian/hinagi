@@ -26,9 +26,9 @@
                 "useSingleCaseStatement": "off",
                 "noParameterProperties": "off",
                 "noNamespace": "off",
-                "useImportType": "off",
                 "useExplicitLengthCheck": "off",
-                "useDefaultSwitchClause": "off"
+                "useDefaultSwitchClause": "off",
+                "useConst": "off"
             },
             "complexity": {
                 "noStaticOnlyClass": "off",
@@ -50,10 +50,12 @@
                 "useHookAtTopLevel": "off",
                 "noUnusedVariables": "off",
                 "useImportExtensions": "off",
-                "noUnusedFunctionParameters": "off"
+                "noUnusedFunctionParameters": "off",
+                "noUndeclaredDependencies": "off"
             },
             "performance": {
-                "noBarrelFile": "off"
+                "noBarrelFile": "off",
+                "noReExportAll": "off"
             }
         }
     },

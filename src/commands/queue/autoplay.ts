@@ -1,31 +1,29 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types/index.js";
-import { Utils } from "#hinagi/structures";
 import type { EmbedConfig } from "#hinagi/types";
 
 @Declare({
-    name: "nowplaying",
-    description: "Show the currently playing song.",
-    aliases: ["np", "current", "now"],
+    name: "autoplay",
+    description: "Toggles the autoplay feature.",
+    aliases: ["ap"],
     integrationTypes: ["GuildInstall"],
     contexts: ["Guild"],
 })
-@Middlewares(["inVoiceChannel", "sameVoiceChannel", "queueExists"])
-export default class NowPlayingCommand extends Command {
+@Middlewares(["inVoiceChannel", "sameVoiceChannel", "queueExists", "queueIsEmpty"])
+export default class AutoplayCommand extends Command {
     public override async run(ctx: CommandContext) {
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
-
         const player = ctx.client.manager.getPlayer(ctx.guildId!);
-        const currentSong = player.queue.current;
+        const autoplay = !!player.get("enabledAutoplay");
 
-        if (!currentSong) {
+        if (!player.playing) {
             return ctx.write({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
                         color: colors.transparent,
-                        description: `${emojis.error} There is no song currently playing!`,
+                        description: `${emojis.error} There is no song currently playing, try resuming or adding a song to the queue first!`,
                     },
                 ],
             });
@@ -33,11 +31,13 @@ export default class NowPlayingCommand extends Command {
 
         await ctx.deferReply();
 
+        player.set("enabledAutoplay", !autoplay);
+
         return ctx.editOrReply({
             embeds: [
                 {
                     color: colors.transparent,
-                    description: `**Now Playing**\n${emojis.playing} ${Utils.toString(currentSong!)}\n${Utils.createProgressBar(player)}`,
+                    description: `${emojis.success} Autoplay is now ${autoplay ? "disabled" : "enabled"}.`,
                 },
             ],
         });

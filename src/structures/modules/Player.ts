@@ -1,8 +1,9 @@
 import config from "config";
 import { LavalinkManager } from "lavalink-client";
 import type { GuildShardPayload, SearchResult } from "lavalink-client";
-import type { PlayerConfig } from "../../utils/types";
-import { Hinagi } from "../Client";
+import { autoPlayFunction } from "#hinagi/functions";
+import type { Hinagi } from "#hinagi/structures";
+import type { PlayerConfig } from "#hinagi/types";
 
 const playerConfig = config.get<PlayerConfig>("playerConfig");
 
@@ -16,6 +17,9 @@ export class Manager extends LavalinkManager {
             },
             playerOptions: {
                 defaultSearchPlatform: playerConfig.defaultSearchPlatform,
+                onEmptyQueue: {
+                    autoPlayFunction,
+                },
             },
         });
 

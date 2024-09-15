@@ -1,2 +1,2 @@
-export { BotConfig, EmbedConfig, PlayerConfig } from "./config";
-export { DestroyReason } from "./player";
+export { BotConfig, EmbedConfig, PlayerConfig } from "./config.js";
+export { DestroyReason } from "./player.js";

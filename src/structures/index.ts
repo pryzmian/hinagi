@@ -1,4 +1,4 @@
-export { Utils } from "./Utils";
-export { Hinagi } from "./Client";
-export { Database } from "./modules/Database";
-export { Manager } from "./modules/Player";
+export { Utils } from "./modules/Utils.js";
+export { Hinagi } from "./client/Client.js";
+export { Manager } from "./modules/Player.js";
+export { EmbedPaginator } from "./modules/Paginator.js";

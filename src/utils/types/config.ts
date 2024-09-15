@@ -5,6 +5,8 @@ export type BotConfig = {
     supportServer: string;
     inviteLink: string;
     sourceCode: string;
+    goodByeImage: string;
+    systemChannel: string;
 };
 
 export type EmbedConfig = {
@@ -25,7 +27,8 @@ export type EmbedConfig = {
         stop: string;
         queue: string;
         playing: string;
-        thinking: string;
+        upnext: string;
+        waving: string;
         support: string;
         source: string;
         invite: string;

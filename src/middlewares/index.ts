@@ -1,8 +1,11 @@
-import { queueExistsMiddleware } from "./validators/queue";
-import { inVoiceChannelMiddleware, sameVoiceChannelMiddleware } from "./validators/voice";
+import { historyIsEmptyMiddleware, queueExistsMiddleware, queueIsEmptyMiddleware, trackExistsMiddleware } from "./validators/queue.js";
+import { inVoiceChannelMiddleware, sameVoiceChannelMiddleware } from "./validators/voice.js";
 
-export const Middlewares = {
+export const hinagiMiddlewares = {
     inVoiceChannel: inVoiceChannelMiddleware,
     sameVoiceChannel: sameVoiceChannelMiddleware,
     queueExists: queueExistsMiddleware,
+    queueIsEmpty: queueIsEmptyMiddleware,
+    historyIsEmpty: historyIsEmptyMiddleware,
+    trackExists: trackExistsMiddleware,
 } as const;
