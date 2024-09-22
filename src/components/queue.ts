@@ -1,19 +1,18 @@
 import config from "config";
-import { Command, type CommandContext, Declare, Embed, Middlewares } from "seyfert";
+import { ComponentCommand, type ComponentContext, Embed, Middlewares } from "seyfert";
 import { MessageFlags } from "seyfert/lib/types";
 import { EmbedPaginator, Utils } from "#hinagi/structures";
 import type { EmbedConfig } from "#hinagi/types";
 
-@Declare({
-    name: "queue",
-    description: "Show the current queue of songs.",
-    aliases: ["q"],
-    integrationTypes: ["GuildInstall"],
-    contexts: ["Guild"],
-})
-@Middlewares(["inVoiceChannel", "sameVoiceChannel", "queueExists", "queueIsEmpty"])
-export default class QueueCommand extends Command {
-    public override async run(ctx: CommandContext) {
+@Middlewares(["inVoiceChannel", "sameVoiceChannel", "trackExists", "queueExists", "queueIsEmpty"])
+export default class QueueButton extends ComponentCommand {
+    componentType = "Button" as const;
+
+    filter(ctx: ComponentContext<typeof this.componentType>) {
+        return ctx.customId === "queue-button";
+    }
+
+    async run(ctx: ComponentContext<typeof this.componentType>) {
         const { client } = ctx;
 
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
@@ -26,22 +25,22 @@ export default class QueueCommand extends Command {
         const current = player.queue.current;
         const paginator = new EmbedPaginator(ctx);
 
-        const nowPlayingDescription = `${emojis.playing} **Now Playing:**\n${Utils.toHyperLink(current!)}\n${Utils.createProgressBar(player)}\n\n${emojis.upnext} **Up Next:**\n`;
+        const nowPlayingDescription = `${emojis.playing} **Now playing:**\n${Utils.toHyperLink(current!) ?? "Nothing playing right now..."}\n${Utils.createProgressBar(player)}\n\n${emojis.upnext} **Up Next:**\n`;
 
         if (!tracks.length) {
-            return ctx.editOrReply({
+            return ctx.write({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
-                        color: colors.success,
-                        description: `${emojis.error} ${nowPlayingDescription}No tracks in queue. Add some tracks with the \`play\` command.`,
+                        color: colors.transparent,
+                        description: `${nowPlayingDescription}No tracks in queue. Add some tracks with the \`play\` command.`,
                     },
                 ],
             });
         }
 
         if (tracks.length < tracksPerPage) {
-            await ctx.editOrReply({
+            await ctx.write({
                 embeds: [
                     {
                         color: colors.transparent,
@@ -66,7 +65,7 @@ export default class QueueCommand extends Command {
                 );
             }
 
-            await paginator.reply();
+            await paginator.reply(true);
         }
     }
 }

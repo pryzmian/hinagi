@@ -8,4 +8,4 @@ export const hinagiMiddlewares = {
     queueIsEmpty: queueIsEmptyMiddleware,
     historyIsEmpty: historyIsEmptyMiddleware,
     trackExists: trackExistsMiddleware,
-} as const;
+};

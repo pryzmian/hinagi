@@ -1,7 +1,7 @@
 import config from "config";
 
 import { Command, type CommandContext, Declare, Middlewares, Options, createStringOption } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import { Utils } from "#hinagi/structures";
 import { DestroyReason, type EmbedConfig } from "#hinagi/types";
 
@@ -55,7 +55,7 @@ export default class PlayCommand extends Command {
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
         const voiceChannel = client.cache.voiceStates?.get(member?.id!, ctx.guildId!);
 
-        if (!client.manager.isNodeAvailable()) {
+        if (!client.manager.isUseable()) {
             return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
@@ -77,10 +77,10 @@ export default class PlayCommand extends Command {
             volume: 100,
         });
 
+        if (!player.connected) await player.connect();
+
         const { loadType, tracks, playlist } = await client.manager.search(query, author);
         player.set("commandContext", ctx);
-
-        if (!player.connected) await player.connect();
 
         switch (loadType) {
             case "empty":
@@ -109,7 +109,7 @@ export default class PlayCommand extends Command {
                         embeds: [
                             {
                                 color: colors.transparent,
-                                description: `${emojis.success} Added *${Utils.toHyperLink(tracks[0])}* to the queue!`,
+                                description: `${emojis.success} Added ${Utils.toHyperLink(tracks[0])} to the queue!`,
                             },
                         ],
                     });
@@ -125,7 +125,7 @@ export default class PlayCommand extends Command {
                         embeds: [
                             {
                                 color: colors.transparent,
-                                description: `${emojis.success} Added *${Utils.toHyperLink(playlist!, query)}* to the queue! (${tracks.length} songs)`,
+                                description: `${emojis.success} Added ${Utils.toHyperLink(playlist!, query)} to the queue! (${tracks.length} songs)`,
                             },
                         ],
                     });

@@ -1,6 +1,6 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares, Options, createIntegerOption } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import type { EmbedConfig } from "#hinagi/types";
 
 const options = {
@@ -30,7 +30,7 @@ export default class VolumeCommand extends Command {
         const player = client.manager.getPlayer(ctx.guildId!);
 
         if (!player.playing) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {

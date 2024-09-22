@@ -1,8 +1,8 @@
 import config from "config";
-import type { AnyContext, OnOptionsReturnObject } from "seyfert";
+import type { CommandContext, OnOptionsReturnObject } from "seyfert";
 import type { EmbedConfig } from "#hinagi/types";
 
-export async function onOptionsError(context: AnyContext, metadata: OnOptionsReturnObject): Promise<void> {
+export async function onOptionsError(context: CommandContext, metadata: OnOptionsReturnObject): Promise<void> {
     const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
     const errorMessage = Object.entries(metadata)
         .filter((_) => _[1].failed)

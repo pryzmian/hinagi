@@ -48,12 +48,12 @@ export class Utils {
      * @param usage - The usage bytes to format.
      * @returns The formatted usage string.
      */
-    public static formatCPUUsage(usage: number): string {
-        const cpuUsage = process.cpuUsage();
-        const totalUsage = cpuUsage.user + cpuUsage.system;
-        const cpuUsagePercentage = (usage / totalUsage) * 100;
+    public static formatCPUUsage(): number {
+        const { user, system } = process.cpuUsage();
+        const totalCpuTime = (user + system) / 1e6;
+        const uptime = process.uptime();
 
-        return `${cpuUsagePercentage.toFixed(2)}%`;
+        return (totalCpuTime / uptime) * 100;
     }
 
     /**
@@ -79,9 +79,11 @@ export class Utils {
      * @param item - The item to convert.
      * @returns The hyperlink string.
      */
-    public static toHyperLink(item: TrackItem | PlaylistItem, query?: string): string {
-        if ("info" in item) return `[${item.info.title}](${item.info.uri})`;
-        return `[${item.name}](${item.uri ?? query ?? ""})`;
+    public static toHyperLink(item: TrackItem | PlaylistItem, query?: string): string | null {
+        if (!item) return null;
+
+        if ("info" in item) return `*[${item.info.title}](${item.info.uri})*`;
+        return `*[${item.name}](${item.uri ?? query})*`;
     }
 
     /**
@@ -112,17 +114,15 @@ export class Utils {
         const currentPosition = player.position ?? 0;
         const trackDuration = player.queue.current?.info.duration ?? 0;
 
-        const line = "█";
-        const space = "▁";
+        // Return an empty bar if trackDuration is 0
+        if (trackDuration === 0) {
+            return `0:00 [${"▁".repeat(15)}] 0:00`;
+        }
 
         const barLength = 15;
         const filledLength = Math.floor((currentPosition / trackDuration) * barLength);
-        const emptyLength = barLength - filledLength;
+        const bar = "█".repeat(filledLength).padEnd(barLength, "▁");
 
-        const bar = line.repeat(filledLength) + space.repeat(emptyLength);
-        const formattedCurrentPosition = Utils.formatDuration(currentPosition);
-        const formattedTrackDuration = Utils.formatDuration(trackDuration);
-
-        return `${formattedCurrentPosition} [${bar}] ${formattedTrackDuration}`;
+        return `${Utils.formatDuration(currentPosition)} [${bar}] ${Utils.formatDuration(trackDuration)}`;
     }
 }

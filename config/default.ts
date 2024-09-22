@@ -40,13 +40,12 @@ export const playerConfig = {
     defaultVolume: 100,
     defaultSearchPlatform: "spsearch",
     emptyChannelTimeout: 300_000, // 5 minutes
-    maxQueueSize: null,
     nodes: [
         {
-            id: process.env.LAVALINK_NODE_ID!,
-            host: process.env.LAVALINK_HOST!,
-            port: Number(process.env.LAVALINK_PORT),
-            authorization: process.env.LAVALINK_AUTHORIZATION!,
+            id: process.env.LAVALINK_NODE_ID ?? "main",
+            host: process.env.LAVALINK_HOST ?? "localhost",
+            port: Number(process.env.LAVALINK_PORT) ?? 2333,
+            authorization: process.env.LAVALINK_AUTHORIZATION ?? "youshallnotpass",
         },
     ],
 } satisfies PlayerConfig;

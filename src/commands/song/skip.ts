@@ -1,6 +1,6 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares, Options, createIntegerOption } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import { Utils } from "#hinagi/structures";
 import type { EmbedConfig } from "#hinagi/types";
 
@@ -29,7 +29,7 @@ export default class SkipCommand extends Command {
         const player = client.manager.getPlayer(ctx.guildId!);
 
         if (!player.queue.current) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -41,7 +41,7 @@ export default class SkipCommand extends Command {
         }
 
         if (!player.playing) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -53,7 +53,7 @@ export default class SkipCommand extends Command {
         }
 
         if (to && to > player.queue.tracks.length) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -68,7 +68,7 @@ export default class SkipCommand extends Command {
 
         try {
             const targetTrack = to ? player.queue.tracks[to - 1] : player.queue.current;
-            const toSelection = to ? `to *${Utils.toHyperLink(targetTrack!)}*` : `*${Utils.toHyperLink(targetTrack!)}*`;
+            const toSelection = to ? `to ${Utils.toHyperLink(targetTrack!)}` : `${Utils.toHyperLink(targetTrack!)}`;
 
             await player.skip(to, false);
 

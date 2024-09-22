@@ -1,6 +1,6 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares, type VoiceChannel } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import { DestroyReason, type EmbedConfig } from "#hinagi/types";
 
 @Declare({
@@ -21,7 +21,7 @@ export default class JoinCommand extends Command {
         const isVoiceChannel = (await memberVoiceChannel?.channel())?.isVoice();
 
         if (!isVoiceChannel) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -42,7 +42,7 @@ export default class JoinCommand extends Command {
             const isNotSameChannel = memberVoiceChannel!.channelId !== botVoiceChannel.channelId;
 
             if (!isEmpty && (isAlreadyConnected || isNotSameChannel)) {
-                return ctx.write({
+                return ctx.editOrReply({
                     flags: MessageFlags.Ephemeral,
                     embeds: [
                         {

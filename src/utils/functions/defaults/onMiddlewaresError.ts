@@ -1,6 +1,6 @@
 import config from "config";
 import type { AnyContext } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import type { EmbedConfig } from "#hinagi/types";
 
 export async function onMiddlewaresError(context: AnyContext, error: string): Promise<void> {

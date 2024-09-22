@@ -1,6 +1,6 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import type { EmbedConfig } from "#hinagi/types";
 
 @Declare({
@@ -18,7 +18,7 @@ export default class PauseCommand extends Command {
         const player = client.manager.getPlayer(ctx.guildId!);
 
         if (!player.queue.current) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {

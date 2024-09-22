@@ -1,7 +1,7 @@
 import config from "config";
 import { ActionRow, type AnyContext, Button, type Embed, type Message, type WebhookMessage } from "seyfert";
 import type { InteractionCreateBodyRequest, InteractionMessageUpdateBodyRequest } from "seyfert/lib/common/index.js";
-import { type APIButtonComponentWithCustomId, ButtonStyle, ComponentType, MessageFlags } from "seyfert/lib/types/index.js";
+import { type APIButtonComponentWithCustomId, ButtonStyle, ComponentType, MessageFlags } from "seyfert/lib/types";
 import type { EmbedConfig } from "#hinagi/types";
 
 const { colors } = config.get<EmbedConfig>("embedConfig");
@@ -53,7 +53,7 @@ export class EmbedPaginator {
             idle: 60000,
             filter: async (interaction) => {
                 if (interaction.user.id !== ctx.author.id) {
-                    await interaction.write({
+                    await interaction.editOrReply({
                         flags: MessageFlags.Ephemeral,
                         embeds: [
                             {

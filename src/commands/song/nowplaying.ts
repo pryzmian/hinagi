@@ -1,6 +1,6 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import { Utils } from "#hinagi/structures";
 import type { EmbedConfig } from "#hinagi/types";
 
@@ -20,7 +20,7 @@ export default class NowPlayingCommand extends Command {
         const currentSong = player.queue.current;
 
         if (!currentSong) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {

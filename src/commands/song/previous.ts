@@ -1,6 +1,5 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
 import { Utils } from "#hinagi/structures";
 import type { EmbedConfig } from "#hinagi/types";
 
@@ -11,23 +10,11 @@ import type { EmbedConfig } from "#hinagi/types";
     integrationTypes: ["GuildInstall"],
     contexts: ["Guild"],
 })
-@Middlewares(["inVoiceChannel", "sameVoiceChannel", "queueExists", "historyIsEmpty", "queueIsEmpty"])
+@Middlewares(["inVoiceChannel", "sameVoiceChannel", "queueExists", "historyIsEmpty"])
 export default class PreviousCommand extends Command {
     public override async run(ctx: CommandContext) {
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
         const player = ctx.client.manager.getPlayer(ctx.guildId!);
-
-        if (!player.playing) {
-            return ctx.write({
-                flags: MessageFlags.Ephemeral,
-                embeds: [
-                    {
-                        color: colors.transparent,
-                        description: `${emojis.error} There is no song currently playing, try resuming or adding a song to the queue first!`,
-                    },
-                ],
-            });
-        }
 
         await ctx.deferReply();
 

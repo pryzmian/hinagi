@@ -24,6 +24,12 @@ export class Hinagi extends Client {
                     onRunError,
                 },
             },
+            components: {
+                defaults: {
+                    onMiddlewaresError,
+                    onRunError,
+                },
+            },
         });
 
         this.manager = new Manager(this);
@@ -52,6 +58,7 @@ export class Hinagi extends Client {
         });
 
         await this.start();
-        await this.uploadCommands();
+        await this.manager.load();
+        await this.uploadCommands({ cachePath: "commands.json" });
     }
 }

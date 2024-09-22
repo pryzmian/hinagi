@@ -1,16 +1,14 @@
 import config from "config";
 import { type CommandContext, Declare, Options, SubCommand, createIntegerOption } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import type { EmbedConfig } from "#hinagi/types";
 
 const options = {
     start: createIntegerOption({
-        name: "start",
         description: "The start index of the range.",
         required: true,
     }),
     end: createIntegerOption({
-        name: "end",
         description: "The end index of the range.",
         required: true,
     }),
@@ -30,7 +28,7 @@ export default class RemoveRangeCommand extends SubCommand {
         const player = client.manager.getPlayer(ctx.guildId!);
 
         if (start >= end || end <= start) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -42,7 +40,7 @@ export default class RemoveRangeCommand extends SubCommand {
         }
 
         if (start > player.queue.tracks.length || end > player.queue.tracks.length) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {

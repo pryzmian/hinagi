@@ -1,6 +1,6 @@
-import { createMiddleware } from "seyfert";
+import { type AnyContext, createMiddleware } from "seyfert";
 
-export const queueExistsMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
+export const queueExistsMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
@@ -9,19 +9,19 @@ export const queueExistsMiddleware = createMiddleware<void>(async ({ context, ne
     return next();
 });
 
-export const queueIsEmptyMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
+export const queueIsEmptyMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
     const isAutoplayActive = !!player?.get("enabledAutoplay");
-    const queueLength = player.queue.current ? player.queue.tracks.length + 1 : player.queue.tracks.length;
+    const queueLength = player.queue.tracks.length + Number(!!player.queue.current);
 
     if (!isAutoplayActive && queueLength === 0) return stop("There are no songs in the queue, try adding some songs first!");
 
     return next();
 });
 
-export const historyIsEmptyMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
+export const historyIsEmptyMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
@@ -30,7 +30,7 @@ export const historyIsEmptyMiddleware = createMiddleware<void>(async ({ context,
     return next();
 });
 
-export const trackExistsMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
+export const trackExistsMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
     const { guildId, interaction, client } = context;
     const player = client.manager.getPlayer(guildId!);
     const messageId = player?.get<string>("messageId") ?? "";

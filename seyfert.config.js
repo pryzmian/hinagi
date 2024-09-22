@@ -1,10 +1,13 @@
 const { config } = require("seyfert");
-const { GatewayIntentBits } = require("seyfert/lib/types/index.js");
+const { GatewayIntentBits } = require("seyfert/lib/types");
 
-const isDev = process.argv.includes("--dev");
+const isWindows = process.platform === "win32";
+const isDebug = process.argv.includes("--debug");
+
+const output = isWindows && isDebug ? "src" : "dist";
 
 module.exports = config.bot({
-    debug: isDev,
+    debug: isDebug,
     token: process.env.DISCORD_TOKEN,
     applicationId: process.env.APPLICATION_ID,
     intents: [
@@ -14,9 +17,10 @@ module.exports = config.bot({
         GatewayIntentBits.MessageContent,
     ],
     locations: {
-        output: "dist",
+        output,
         base: "src",
         events: "events",
         commands: "commands",
+        components: "components",
     },
 });

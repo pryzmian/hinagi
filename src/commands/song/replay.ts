@@ -1,6 +1,6 @@
 import config from "config";
 import { Command, type CommandContext, Declare, Middlewares } from "seyfert";
-import { MessageFlags } from "seyfert/lib/types/index.js";
+import { MessageFlags } from "seyfert/lib/types";
 import { Utils } from "#hinagi/structures";
 import type { EmbedConfig } from "#hinagi/types";
 
@@ -18,7 +18,7 @@ export default class ReplayCommand extends Command {
         const player = ctx.client.manager.getPlayer(ctx.guildId!);
 
         if (!player.queue.current) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -30,7 +30,7 @@ export default class ReplayCommand extends Command {
         }
 
         if (!player.playing) {
-            return ctx.write({
+            return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
                 embeds: [
                     {
@@ -48,7 +48,7 @@ export default class ReplayCommand extends Command {
             embeds: [
                 {
                     color: colors.transparent,
-                    description: `${emojis.success} Successfully restarted the current track: ${Utils.toHyperLink(player.queue.current)}. Enjoy listening again!`,
+                    description: `${emojis.success} Restarted track ${Utils.toHyperLink(player.queue.current)}. Enjoy listening again!`,
                 },
             ],
         });

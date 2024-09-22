@@ -2,12 +2,14 @@ import config from "config";
 import { LavalinkManager } from "lavalink-client";
 import type { GuildShardPayload, SearchResult } from "lavalink-client";
 import { autoPlayFunction } from "#hinagi/functions";
-import type { Hinagi } from "#hinagi/structures";
+import { Handler, type Hinagi } from "#hinagi/structures";
 import type { PlayerConfig } from "#hinagi/types";
 
 const playerConfig = config.get<PlayerConfig>("playerConfig");
 
 export class Manager extends LavalinkManager {
+    public handler: Handler;
+
     constructor(private readonly client: Hinagi) {
         super({
             nodes: playerConfig.nodes,
@@ -23,13 +25,14 @@ export class Manager extends LavalinkManager {
             },
         });
 
-        this.load();
+        this.handler = new Handler(client);
     }
 
     /**
      * Loads the player and event handler.
      */
     public async load(): Promise<void> {
+        await this.handler.load();
         this.client.logger.info("LavalinkManager loaded");
     }
 
@@ -37,7 +40,7 @@ export class Manager extends LavalinkManager {
      * Checks if there are any available nodes to play music.
      * @returns Whether there are any available nodes to play music.
      */
-    public isNodeAvailable(): boolean {
+    public isUseable(): boolean {
         return this.nodeManager.nodes.filter((node) => node.connected).size > 0;
     }
 
