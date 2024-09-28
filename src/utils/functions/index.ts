@@ -3,3 +3,4 @@ export { onOptionsError } from "./defaults/onOptionsError.js";
 export { deferReplyResponse } from "./defaults/deferReplyResponse.js";
 export { onRunError } from "./defaults/onRunError.js";
 export { autoPlayFunction } from "./player/autoplay.js";
+export { emptyChannel } from "./player/voiceState.js";

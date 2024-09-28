@@ -46,14 +46,15 @@ const options = {
     contexts: ["Guild"],
 })
 @Options(options)
-@Middlewares(["inVoiceChannel", "sameVoiceChannel"])
+@Middlewares(["inVoiceChannel", "sameVoiceChannel", "hasPermissions"])
 export default class PlayCommand extends Command {
     public override async run(ctx: CommandContext<typeof options>) {
         const { client, options, member, author } = ctx;
         const { query } = options;
 
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
-        const voiceChannel = client.cache.voiceStates?.get(member?.id!, ctx.guildId!);
+        const voiceChannel = client.cache.voiceStates?.get(member!.id!, ctx.guildId!)!;
+        const me = ctx.me()!;
 
         if (!client.manager.isUseable()) {
             return ctx.editOrReply({
@@ -71,13 +72,23 @@ export default class PlayCommand extends Command {
 
         const player = client.manager.createPlayer({
             guildId: ctx.guildId!,
-            voiceChannelId: voiceChannel?.channelId!,
+            voiceChannelId: voiceChannel.channelId!,
             textChannelId: ctx.channelId!,
             selfDeaf: true,
             volume: 100,
         });
 
-        if (!player.connected) await player.connect();
+        if (!player.connected) {
+            await player.connect();
+
+            const voice = await me.voice();
+            if ((await voiceChannel.channel())!.isStage()) {
+                // Discord things 🗿
+                setTimeout(async () => {
+                    await voice.setSuppress(false).catch(() => {});
+                }, 1000);
+            }
+        }
 
         const { loadType, tracks, playlist } = await client.manager.search(query, author);
         player.set("commandContext", ctx);

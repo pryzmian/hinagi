@@ -4,6 +4,7 @@
         "enabled": true
     },
     "linter": {
+        "ignore": ["node_modules", "scripts"],
         "enabled": true,
         "rules": {
             "all": true,
@@ -28,9 +29,11 @@
                 "noNamespace": "off",
                 "useExplicitLengthCheck": "off",
                 "useDefaultSwitchClause": "off",
-                "useConst": "off"
+                "useConst": "off",
+                "noUselessElse": "off"
             },
             "complexity": {
+                "useSimplifiedLogicExpression": "off",
                 "noStaticOnlyClass": "off",
                 "noBannedTypes": "off",
                 "noForEach": "off",

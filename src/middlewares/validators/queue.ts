@@ -1,6 +1,6 @@
-import { type AnyContext, createMiddleware } from "seyfert";
+import { createMiddleware } from "seyfert";
 
-export const queueExistsMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
+export const queueExistsMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
@@ -9,7 +9,7 @@ export const queueExistsMiddleware = createMiddleware<void, AnyContext>(async ({
     return next();
 });
 
-export const queueIsEmptyMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
+export const queueIsEmptyMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
@@ -21,7 +21,7 @@ export const queueIsEmptyMiddleware = createMiddleware<void, AnyContext>(async (
     return next();
 });
 
-export const historyIsEmptyMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
+export const historyIsEmptyMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { guildId, client } = context;
     const player = client.manager.getPlayer(guildId!);
 
@@ -30,7 +30,7 @@ export const historyIsEmptyMiddleware = createMiddleware<void, AnyContext>(async
     return next();
 });
 
-export const trackExistsMiddleware = createMiddleware<void, AnyContext>(async ({ context, next, stop }) => {
+export const trackExistsMiddleware = createMiddleware<void>(async ({ context, next, stop }) => {
     const { guildId, interaction, client } = context;
     const player = client.manager.getPlayer(guildId!);
     const messageId = player?.get<string>("messageId") ?? "";

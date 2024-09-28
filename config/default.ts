@@ -30,6 +30,7 @@ export const embedConfig = {
         playing: "🎶",
         upnext: "🔄",
         waving: "👋",
+        voice: "🔊",
         support: "🚨",
         source: "💻",
         invite: "🔗",
@@ -39,7 +40,7 @@ export const embedConfig = {
 export const playerConfig = {
     defaultVolume: 100,
     defaultSearchPlatform: "spsearch",
-    emptyChannelTimeout: 300_000, // 5 minutes
+    emptyChannelTimeout: 300_000, // 5 minutes in milliseconds
     nodes: [
         {
             id: process.env.LAVALINK_NODE_ID ?? "main",

@@ -29,6 +29,7 @@ export type EmbedConfig = {
         playing: string;
         upnext: string;
         waving: string;
+        voice: string;
         support: string;
         source: string;
         invite: string;
