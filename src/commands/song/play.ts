@@ -49,12 +49,15 @@ const options = {
 @Middlewares(["inVoiceChannel", "sameVoiceChannel", "hasPermissions"])
 export default class PlayCommand extends Command {
     public override async run(ctx: CommandContext<typeof options>) {
-        const { client, options, member, author } = ctx;
+        const { client, options, member, author, guildId } = ctx;
+        const { botId, cache } = client;
         const { query } = options;
 
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
-        const voiceChannel = client.cache.voiceStates?.get(member!.id!, ctx.guildId!)!;
-        const me = ctx.me()!;
+        const [me, voiceChannel] = await Promise.all([
+            ctx.me() ?? client.members.fetch(guildId!, botId),
+            cache.voiceStates?.get(member!.id!, guildId!)!.channel()!,
+        ]);
 
         if (!client.manager.isUseable()) {
             return ctx.editOrReply({
@@ -72,7 +75,7 @@ export default class PlayCommand extends Command {
 
         const player = client.manager.createPlayer({
             guildId: ctx.guildId!,
-            voiceChannelId: voiceChannel.channelId!,
+            voiceChannelId: voiceChannel.id!,
             textChannelId: ctx.channelId!,
             selfDeaf: true,
             volume: 100,
@@ -82,7 +85,7 @@ export default class PlayCommand extends Command {
             await player.connect();
 
             const voice = await me.voice();
-            if ((await voiceChannel.channel())!.isStage()) {
+            if (voiceChannel.isStage()) {
                 // Discord things 🗿
                 setTimeout(async () => {
                     await voice.setSuppress(false).catch(() => {});

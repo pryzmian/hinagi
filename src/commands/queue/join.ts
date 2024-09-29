@@ -17,7 +17,6 @@ export default class JoinCommand extends Command {
         const { cache, manager, botId } = client;
         const { colors, emojis } = config.get<EmbedConfig>("embedConfig");
 
-        // Fetch both member and bot voice states in parallel to avoid unnecessary awaiting
         const [botMember, memberVoiceState, botVoiceState] = await Promise.all([
             ctx.me() ?? client.members.fetch(guildId!, botId),
             cache.voiceStates?.get(member?.id!, guildId!)?.channel(),
@@ -27,7 +26,6 @@ export default class JoinCommand extends Command {
         const memberVoiceChannel = memberVoiceState as VoiceChannel;
         const botVoiceChannel = botVoiceState as VoiceChannel;
 
-        // Early return if already in the same voice channel
         if (botVoiceChannel?.id === memberVoiceChannel?.id) {
             return ctx.editOrReply({
                 flags: MessageFlags.Ephemeral,
@@ -40,7 +38,6 @@ export default class JoinCommand extends Command {
             });
         }
 
-        // Check if botVoiceChannel is occupied by non-bots
         if (botVoiceChannel && botVoiceChannel.id !== memberVoiceChannel.id) {
             const channelStates = await botVoiceChannel.states();
             const members = await Promise.all(channelStates.map((x) => x.member()));
@@ -59,7 +56,6 @@ export default class JoinCommand extends Command {
             }
         }
 
-        // Handle player creation or switching voice channels
         const player = manager.getPlayer(guildId!);
         if (player) {
             await player.changeVoiceState({
@@ -78,18 +74,15 @@ export default class JoinCommand extends Command {
                 .connect();
         }
 
-        // Handle stage channel scenario
         const botVoice = await botMember.voice();
         if (memberVoiceChannel.isStage()) {
-            // Doing this because discord bugs if the bot joins to quickly or sum and does not play audio 🗿
+            // Discord things 🗿
             setTimeout(async () => {
                 await botVoice.setSuppress(false).catch(() => {});
             }, 1000);
         } else {
             botVoice.setChannel(memberVoiceChannel.id!).catch(() => {});
         }
-
-        // Send success message
 
         return ctx.editOrReply({
             embeds: [
